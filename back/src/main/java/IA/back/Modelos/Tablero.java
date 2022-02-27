@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Tablero {
     private ArrayList<ArrayList<String>> tablero;
     private ArrayList<Position> posibles;
+    private int heuristic;
 
     public Tablero(ArrayList<ArrayList<String>> tablero) {
         this.tablero = tablero;
@@ -16,6 +17,19 @@ public class Tablero {
         }
     }
 
+
+
+    // Clone Methods
+    public ArrayList<ArrayList<String>> cloneTablero(){
+        ArrayList<ArrayList<String>> newTablero = new ArrayList<>();
+        for (ArrayList<String> arr: this.tablero ) {
+            newTablero.add((ArrayList<String>) arr.clone());
+        }
+        return newTablero;
+    }
+
+
+    // Getter and Setter
     public ArrayList<ArrayList<String>> getTablero() {
         return tablero;
     }
