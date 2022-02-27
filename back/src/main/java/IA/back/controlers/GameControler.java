@@ -23,10 +23,16 @@ public class GameControler {
 
     @PostMapping( value = { "/changePostions" } )
     public ResponseEntity changePostions(@RequestBody CuadriculaPOJO cuadriculaPOJO ) {
-        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero());
+        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), cuadriculaPOJO.getPosition());
         Tablero newTablero = this.gameService.updateTablero(tablero);
         System.out.println("Entre");
         return new ResponseEntity( newTablero.getTablero(), HttpStatus.CREATED );
+    }
+    @PostMapping( value = { "/isWining" } )
+    public ResponseEntity isWinning(@RequestBody CuadriculaPOJO cuadriculaPOJO ) {
+        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), cuadriculaPOJO.getPosition());
+        Boolean win = this.gameService.isWinig(tablero, cuadriculaPOJO.getType());
+        return new ResponseEntity( win, HttpStatus.CREATED );
     }
 
 

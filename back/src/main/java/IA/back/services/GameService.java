@@ -19,4 +19,7 @@ public class GameService {
         return tablero;
     }
 
+    public boolean isWinig (Tablero tablero, String type){
+        return tablero.isWining(type);
+    }
 }

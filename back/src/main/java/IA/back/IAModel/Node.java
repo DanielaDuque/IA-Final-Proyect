@@ -1,5 +1,6 @@
 package IA.back.IAModel;
 
+import IA.back.Modelos.Position;
 import IA.back.Modelos.Tablero;
 
 import java.util.ArrayList;
@@ -36,6 +37,15 @@ public class Node {
 
     public void addChild(Node child) {
         this.childs.add(child) ;
+    }
+
+    public void createChilds(String type){
+        for (Position pos: this.tablero.getPosibles()) {
+            Tablero newTablero = new Tablero(this.tablero.cloneTablero(), pos);
+            newTablero.setTablero(pos,type);
+            Node aux = new Node(newTablero);
+            this.addChild(aux);
+        }
     }
 
 

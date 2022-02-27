@@ -2,8 +2,6 @@ package IA.back.IAModel;
 
 import IA.back.Modelos.Tablero;
 
-import java.util.PriorityQueue;
-
 public class MinMax {
     private Graph graph;
 
@@ -11,22 +9,27 @@ public class MinMax {
         this.graph = new Graph(root);
     }
 
-
+    /**
+     * MinMAx with AlphaBeta optimization
+     * @param depth
+     * @return
+     */
     public int MinMax(int depth){
         return this.MinMaxAux(this.graph.getRoot(), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
     }
     /**
-     *
+     * MinMAx with AlphaBeta optimization - Auxiliar function
      * @param position Node to evalue
      * @param depth depth to explore
      * @param alpha Alpha parameter
      * @param beta Beta parameter
-     * @param maximizingPlayer if we are in a max posotion
-     * @return MinMAx with AlphaBeta optimization
+     * @param maximizingPlayer if we are in a max position
+     * @return Best Heuristic value
      */
-    public int MinMaxAux(Node position, int depth, int alpha, int beta, boolean maximizingPlayer){
+    private int MinMaxAux(Node position, int depth, int alpha, int beta, boolean maximizingPlayer){
         if (depth==0 ||  position.isGoal()) return position.getHeuristic();
         if (maximizingPlayer) {
+            position.createChilds("W");
             int value = Integer.MIN_VALUE;
             for ( Node child: position.getChilds()) {
                 int eval = MinMaxAux(child, depth-1, alpha, beta, false);
@@ -38,6 +41,7 @@ public class MinMax {
             }
             return value;
         }else{
+            position.createChilds("B");
             int value = Integer.MAX_VALUE;
             for ( Node child: position.getChilds()) {
                 int eval = MinMaxAux(child, depth-1, alpha, beta, true);
