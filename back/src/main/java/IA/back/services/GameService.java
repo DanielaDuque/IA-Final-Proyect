@@ -11,8 +11,7 @@ import java.util.Random;
 @Service
 public class GameService {
 
-    public Tablero updateTablero(Tablero tablero, Position position){
-        tablero.setTablero(position, "B");
+    public Tablero updateTablero(Tablero tablero){
         Random rand = new Random();
         int pos = rand.nextInt(tablero.getPosibles().size());
         Position newPos = tablero.getPosibles().get(pos);

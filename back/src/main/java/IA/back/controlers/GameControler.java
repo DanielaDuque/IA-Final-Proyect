@@ -24,7 +24,7 @@ public class GameControler {
     @PostMapping( value = { "/changePostions" } )
     public ResponseEntity changePostions(@RequestBody CuadriculaPOJO cuadriculaPOJO ) {
         Tablero tablero = new Tablero(cuadriculaPOJO.getTablero());
-        Tablero newTablero = this.gameService.updateTablero(tablero, cuadriculaPOJO.getPosition());
+        Tablero newTablero = this.gameService.updateTablero(tablero);
         System.out.println("Entre");
         return new ResponseEntity( newTablero.getTablero(), HttpStatus.CREATED );
     }
