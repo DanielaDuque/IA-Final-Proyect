@@ -10,4 +10,8 @@ class BackApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void centerMass() {
+
+	}
 }
