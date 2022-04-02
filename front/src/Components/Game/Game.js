@@ -15,12 +15,12 @@ class Game extends Component{
         this.makeMove = this.makeMove.bind(this);
     }
     async makeMove(row, col ){
-        if(this.controlers.game[row][col] === "C") {
+        if(this.controlers.game[row][col] === this.controlers.empty) {
             await this.controlers.makeMove(row, col);
             this.setState({
                 win: this.controlers.win
             });
-            await this.controlers.makeMoveBack("W",row,col);
+            await this.controlers.makeMoveBack(this.controlers.white,row,col);
             this.setState({
                 src: this.controlers.game,
                 win: this.controlers.win
@@ -31,8 +31,8 @@ class Game extends Component{
       
     columns(idx){
         let table = [];
-        for (let index = 0; index < 9; index++) {
-            let val = idx*9 + index;
+        for (let index = 0; index < 19; index++) {
+            let val = idx*(19) + index;
             table.push(
                 <div className="col-auto col-size fondo" key = {val} id={val} >
                     <Ficha
@@ -48,9 +48,9 @@ class Game extends Component{
     }
     rows (){
         let table = [];
-        for (let index = 0; index < 9; index++) {
+        for (let index = 0; index < 19; index++) {
             table.push(
-                <div className="row row-cols-9" >
+                <div className="row" >
                     {this.columns(index)}
                 </div>  
             )
@@ -58,10 +58,6 @@ class Game extends Component{
         return table;
     }
 
-    show(){
-        if(this.state === "C") return "window-close";
-        else return "";
-    }
     render(){
         return(
         <div>
@@ -71,12 +67,12 @@ class Game extends Component{
             </section>
 
             <section className={
-                            this.state.win === "C" ? 'window-close ' : ''
+                            this.state.win === this.controlers.empty ? 'window-close ' : ''
                         }>
                 <div class="window-notice" id="window-notice">
                     <div class="content">
                         <div class="content-text">
-                            This game is over. The winner is : {this.state.win==="W" ? "White" : "Black"}
+                            This game is over. The winner is : {this.state.win===1 ? "White" : "Black"}
                         </div>
                         <div class="content-buttons">
                             <div className = "btn-group" role="group">

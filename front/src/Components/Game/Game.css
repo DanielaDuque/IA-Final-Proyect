@@ -1,6 +1,6 @@
 .col-size {
-    width: 5em;
-    height: 5em;
+    width: 2.9em;
+    height: 2.9em;
 }
 .fondo{
     background-color: bisque;
@@ -44,9 +44,9 @@ img{
 }
 
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1012px) {
     .col-size{
-        width: 2.5em;
-        height: 2.5em;    
+        width: 30px;
+        height: 30px;    
     }
   }

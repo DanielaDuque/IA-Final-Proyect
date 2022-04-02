@@ -1,12 +1,26 @@
 package IA.back.IAModel;
 
+import IA.back.Modelos.Position;
+import IA.back.pojo.PositionPOJO;
 import IA.back.Modelos.Tablero;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class MinMax {
-    private Graph graph;
+    private Tablero tablero;
+
 
     public MinMax(Tablero root) {
-        this.graph = new Graph(root);
+        this.tablero = root;
+    }
+
+    public Tablero getNextMove (){
+        retourMinMax ret = this.MinMax(5);
+        this.tablero.setTablero(ret.getPos(), (byte) 1);
+        this.tablero.setChangePos(ret.getPos());
+        System.out.println("-------------------------------------------------------");
+        return this.tablero;
     }
 
     /**
@@ -14,8 +28,10 @@ public class MinMax {
      * @param depth
      * @return
      */
-    public int MinMax(int depth){
-        return this.MinMaxAux(this.graph.getRoot(), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+    private retourMinMax MinMax(int depth){
+        ArrayList<Position> posibles = this.tablero.getPosibles();
+        Collections.sort(posibles);
+        return this.MinMaxAux(this.tablero, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, posibles);
     }
     /**
      * MinMAx with AlphaBeta optimization - Auxiliar function
@@ -26,70 +42,60 @@ public class MinMax {
      * @param maximizingPlayer if we are in a max position
      * @return Best Heuristic value
      */
-    private int MinMaxAux(Node position, int depth, int alpha, int beta, boolean maximizingPlayer){
-        if (depth==0 ||  position.isGoal()) return position.getHeuristic();
+    private retourMinMax MinMaxAux(Tablero position, int depth, int alpha, int beta, boolean maximizingPlayer, ArrayList<Position> posibles){
+        if (depth==0 ||  position.isWining((byte) 1 )) return new retourMinMax(new FirstHeuristic(position).HeuristicValue(), null);
         if (maximizingPlayer) {
-            position.createChilds("W");
-            int value = Integer.MIN_VALUE;
-            for ( Node child: position.getChilds()) {
-                int eval = MinMaxAux(child, depth-1, alpha, beta, false);
-                value = Math.max(value,eval);
-                if (value>= beta){
+            retourMinMax aux = new retourMinMax(Integer.MIN_VALUE,null);
+            int len = posibles.size() - 1;
+            for (int i = 0; i < len; i++) {
+                Position pos = posibles.get(i).clone();
+                //Make
+                position.setTablero(pos, (byte) 1);
+                posibles.remove(i);
+                // retorno
+                retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, false, posibles);
+                int eval = aux1.getValue();
+                if (eval > aux.getValue()) {
+//                  bestPos = pos;
+                    aux.setPos(pos);
+                    aux.setValue(eval);
+                };
+                if(depth == 5) {
+                    System.out.println("" + aux + " : " + pos);
+                }
+                //UnMake
+                position.unSetTablero(pos);
+                posibles.add(i,pos);
+                if (aux.getValue()>= beta){
                     break;
                 }
-                alpha = Math.max(alpha, value);
+                alpha = Math.max(alpha, aux.getValue());
             }
-            return value;
+            return aux;
         }else{
-            position.createChilds("B");
-            int value = Integer.MAX_VALUE;
-            for ( Node child: position.getChilds()) {
-                int eval = MinMaxAux(child, depth-1, alpha, beta, true);
-                value = Math.min(value,eval);
-                if (value <= alpha){
+            retourMinMax aux = new retourMinMax(Integer.MAX_VALUE,null);
+            int len = posibles.size() -1 ;
+            for (int i = 0; i < len; i++) {
+                Position pos = posibles.get(i).clone();
+                //Make
+                position.setTablero(pos, (byte) 2);
+                posibles.remove(i);
+                //Retorno
+                retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, true, posibles);
+                int eval = aux1.getValue();
+                if (eval < aux.getValue() ) {
+                    aux.setPos(pos);
+                    aux.setValue(eval);
+                }
+                // UnMake
+                position.unSetTablero(pos);
+                posibles.add(i,pos);
+                if (aux.getValue() <= alpha){
                     break;
                 }
-                beta = Math.min(beta, value);
+                beta = Math.min(beta, aux.getValue());
             }
-            return value;
+            return aux;
         }
     }
 }
-
-/**
- * unction Minimax(position, depth, maximizingPlayer)
- * 2: if depth == 0 or game over in position then
- * 3: return static evaluation of position
- * 4: if maximizingPlayer then
- * 5: maxEval = −∞
- * 6: each child in position
- * 7: eval = Minimax(child, depth-1, false)
- * 8: maxEval = max(maxEval, eval)
- * 9: return maxEval
- * 10: else
- * 11: minEval = +∞
- * 12: each child in position
- * 13: eval = Minimax(child, depth-1, true)
- * 14: minEval = min(minEval, eval)
- * 15: return minEval
- */
-
-
-/**
- * unction Minimax(position, depth, alpha, deta, maximizingPlayer)
- * 2: if depth == 0 or game over in position then
- *      return static evaluation of position
- * 4: if maximizingPlayer then
- *      each child in position
- * 6:   eval = Minimax(child, depth-1, false)
- *      maxEval = max(maxEval, eval) alpha= max(alpha, eval)
- * 8:   if beta ≤ alpha break
- *          return maxEval
- * 10: else
- *      each child in position
- * 12:       eval = Minimax(child, depth-1, true)
- *           minEval = min(minEval, eval) beta= max(beta, eval)
- * 14:      if beta ≤ alpha break
- *              return minEval
- */
-

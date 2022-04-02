@@ -5,9 +5,9 @@ import white from '../../images/white.png'
 function Ficha(props){
     let getSrc = () =>{
         switch(props.img) {
-            case "B":
+            case 2:
                 return black;
-            case "W":
+            case 1:
                 return white;
             default:
                 return cruz;

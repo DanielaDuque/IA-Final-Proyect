@@ -3,6 +3,8 @@ package IA.back.controlers;
 import IA.back.Modelos.Position;
 import IA.back.Modelos.Tablero;
 import IA.back.pojo.CuadriculaPOJO;
+import IA.back.pojo.PositionPOJO;
+import IA.back.pojo.chagePosPOJO;
 import IA.back.services.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +25,15 @@ public class GameControler {
 
     @PostMapping( value = { "/changePostions" } )
     public ResponseEntity changePostions(@RequestBody CuadriculaPOJO cuadriculaPOJO ) {
-        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), cuadriculaPOJO.getPosition());
+        Position pos = new Position(cuadriculaPOJO.getPosition().getRow(), cuadriculaPOJO.getPosition().getCol());
+        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), pos);
         Tablero newTablero = this.gameService.updateTablero(tablero);
-        System.out.println("Entre");
-        return new ResponseEntity( newTablero.getTablero(), HttpStatus.CREATED );
+        return new ResponseEntity( new chagePosPOJO(newTablero.getTablero(), new PositionPOJO(newTablero.getChangePos())), HttpStatus.CREATED );
     }
     @PostMapping( value = { "/isWining" } )
     public ResponseEntity isWinning(@RequestBody CuadriculaPOJO cuadriculaPOJO ) {
-        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), cuadriculaPOJO.getPosition());
+        Position pos = new Position(cuadriculaPOJO.getPosition().getRow(), cuadriculaPOJO.getPosition().getCol());
+        Tablero tablero = new Tablero(cuadriculaPOJO.getTablero(), pos);
         Boolean win = this.gameService.isWinig(tablero, cuadriculaPOJO.getType());
         return new ResponseEntity( win, HttpStatus.CREATED );
     }

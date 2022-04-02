@@ -3,77 +3,69 @@ package IA.back.IAModel;
 import java.util.ArrayList;
 
 import IA.back.Modelos.Position;
+import IA.back.pojo.PositionPOJO;
+import IA.back.Modelos.Tablero;
 
 
 public class CenterMass {
 
-    private ArrayList<ArrayList<String>> tablero;
-    private int dx;
-    private int dy;
-    private Position centerPosition;
+    private ArrayList<ArrayList<Byte>> tablero;
+    private int dx = 0;
+    private int dy = 0;
     //private int heuristic = 100;
-    private int[] heuristic = {10, 20, 30, 50, 20, 40, 100, 80, 10, 20};
-    private int heuristicFinal;
-    private ArrayList<Integer> pointsX;
-    private ArrayList<Integer> pointsY;
-    private ArrayList<Integer> pointsDX;
-    private ArrayList<Integer> pointsDY;
+    private ArrayList<Integer> heuristic = new ArrayList<>();
+    private int heuristicFinal = 0;
 
-
-    public int TotalX(ArrayList<ArrayList<String>> tablero){
-
+    private void calculeHeuristic(){
         for (int i = 0; i < tablero.size(); i++) {
-            for (int j = 0; j < tablero.get(i).size(); j++) {
-                if(this.tablero.get(i).get(j).equals("1") ) {
-                    pointsX.add(i);
+            for (int j = 0; j < tablero.get(i).size(); j++){
+                if(this.tablero.get(i).get(j)  == 1){
+                    int heuristicAux = new FirstHeuristic(new Tablero(this.tablero,new Position(i,j) ) ).HeuristicValue();
+                    heuristic.add(heuristicAux);
+                    heuristicFinal += heuristicAux;
                 }
             }
         }
-
-        for(int k = 0; k < pointsX.size(); k++){
-            pointsDX.add(pointsX.get(k) * heuristic[k]);
-        }
-
-        for(int l = 0; l < pointsDX.size(); l++){
-            this.dx = dx + pointsX.get(l);
-        }
-
-        return dx;
     }
 
-    public int TotalY(ArrayList<ArrayList<String>> tablero){
+    public void Total(){
+
+        ArrayList<Integer> pointsX = new ArrayList<>();
+        ArrayList<Integer> pointsY  = new ArrayList<>();
+        ArrayList<Integer> pointsDX = new ArrayList<>();
+        ArrayList<Integer> pointsDY = new ArrayList<>();
 
         for (int i = 0; i < tablero.size(); i++) {
             for (int j = 0; j < tablero.get(i).size(); j++) {
-                if(this.tablero.get(i).get(j).equals("1") ) {
+                if(this.tablero.get(i).get(j) == 1 ) {
+                    pointsX.add(i);
                     pointsY.add(j);
                 }
             }
         }
 
         for(int k = 0; k < pointsX.size(); k++){
-            pointsDY.add(pointsX.get(k) * heuristic[k]);
+            pointsDX.add(pointsX.get(k) * heuristic.get(k));
+            pointsDY.add(pointsX.get(k) * heuristic.get(k));
+
         }
 
-        for(int l = 0; l < pointsDY.size(); l++){
-            this.dy = dy + pointsY.get(l);
-        }
+        for(int l = 0; l < pointsDX.size(); l++){
+            this.dx = dx + pointsDX.get(l);
+            this.dy = dy + pointsDY.get(l);
 
-        return dy;
+        }
     }
 
-
-    public Position CenterMassF(int dx, int dy, int[] heuristic){
-
-        for(int l = 0; l < heuristic.length; l++){
-            this.heuristicFinal = heuristicFinal + heuristic[l];
-        }
-
+    public Position CenterMassF(ArrayList<ArrayList<Byte>> tab){
+        this.tablero = tab;
+        this.calculeHeuristic();
+        int size = this.tablero.size();
+        if(heuristicFinal == 0) return new Position( size/2 ,  size/2);
+        this.Total();
         dx = dx / heuristicFinal;
         dy = dy / heuristicFinal;
-
-        return this.centerPosition = new Position(dx, dy);
-
+        return new Position(dx, dy);
     }
     
 }

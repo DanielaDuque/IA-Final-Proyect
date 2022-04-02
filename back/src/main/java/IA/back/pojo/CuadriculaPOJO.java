@@ -1,35 +1,33 @@
 package IA.back.pojo;
 
-import IA.back.Modelos.Position;
-
 import java.util.ArrayList;
 
 public class CuadriculaPOJO {
-    private ArrayList<ArrayList<String>> tablero;
-    private Position position;
-    private String type;
+    private ArrayList<ArrayList<Byte>> tablero;
+    private PositionPOJO position;
+    private Byte type;
 
-    public String getType() {
+    public Byte getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Byte type) {
         this.type = type;
     }
 
-    public ArrayList<ArrayList<String>> getTablero() {
+    public ArrayList<ArrayList<Byte>> getTablero() {
         return tablero;
     }
 
-    public void setTablero(ArrayList<ArrayList<String>> tablero) {
+    public void setTablero(ArrayList<ArrayList<Byte>> tablero) {
         this.tablero = tablero;
     }
 
-    public Position getPosition() {
+    public PositionPOJO getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(PositionPOJO position) {
         this.position = position;
     }
 }
