@@ -22,19 +22,16 @@ public class FirstHeuristic {
 
 
     public int HeuristicValue(){
-        int valor = 0;
-        if(this.tab.isWining(this.typeAdv)) valor = -2000;
-        else if(this.tab.isWining(this.type)) {
-//            System.out.println("gane");
-            valor = 2000;
-        }
-//        System.out.println(" ****** Valor: " + valor);
-//        System.out.println(this.tab);
-        return valor;
-//        int pointMe = HeuristicValueAux(this.type);
-//        int pointAdv = HeuristicValueAux(this.typeAdv);
-////        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
-//        return pointMe - pointAdv;
+//        int valor = 0;
+//        if(this.tab.isWining(this.typeAdv)) valor = -2000;
+//        else if(this.tab.isWining(this.type)) {
+////            System.out.println("gane");
+//            valor = 2000;
+//        }
+        int pointMe = HeuristicValueAux(this.type);
+        int pointAdv = HeuristicValueAux(this.typeAdv);
+//        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
+        return pointMe - pointAdv;
     }
     private int HeuristicValueAux(byte type){
         int heuristic = 0;
@@ -42,9 +39,24 @@ public class FirstHeuristic {
         verifications.add (this.verificarLineas(this.tab.getChangePos().getCol(), this.tab.getChangePos().getRow(),type));
         verifications.add (this.verificarColumnas(this.tab.getChangePos().getCol(), this.tab.getChangePos().getRow(),type));
         for (Points points: verifications) {
-            heuristic += points.getSequencias() * 20;
-            heuristic += points.getSemiSequencias() * 3;
-            heuristic += points.getsome();
+            if(this.tab.isWining(type)) // primera
+                heuristic += 1000;
+            else if (points.getSequencias() == 3 && points.getsome() >= 1) // segunda
+                heuristic += 300;
+            else if (points.getSequencias() == 2 && points.getsomeLeft() >= 1 && points.getsomeRight() >= 1 ) // tercera
+                heuristic += 100;
+            else if (points.getSequencias()  + points.getSemiSequencias() == 1 && (points.getsome() > 6) ) // cuarta
+                heuristic += 100;
+            else if (points.getSequencias() == 2 && (points.getsome() > 1 || points.getSemiSequencias() >= 2) ) // quinta
+                heuristic += 25;
+            else  if (points.getSequencias() == 2 && (points.getsome() + points.getSemiSequencias()) > 4) // sexta
+                heuristic += 20;
+            else if (points.getSequencias() == 2 &&  (points.getsome() + points.getSemiSequencias() ) >= 5 ) // septima
+                heuristic += 15;
+            else  if (points.getSequencias() == 1 && (points.getsome() + points.getSemiSequencias()) > 4) // Octava
+                heuristic += 10;
+            else if (points.getSequencias() == 1 &&  (points.getsome() + points.getSemiSequencias() ) > 2 ) // novena
+                heuristic += 5;
 //            System.out.println(points.getSequencias() + " " + points.getSemiSequencias()  + " " + points.getsome() + this.tab.getChangePos());
         }
 //        System.out.println("--- " + heuristic );
