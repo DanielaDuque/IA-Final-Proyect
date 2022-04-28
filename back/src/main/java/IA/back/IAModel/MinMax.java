@@ -9,8 +9,8 @@ import java.util.Collections;
 
 public class MinMax {
     private Tablero tablero;
-
-
+    private byte moi = (byte) 1;
+    private byte adv = (byte) 2;
     public MinMax(Tablero root) {
         this.tablero = root;
     }
@@ -43,14 +43,16 @@ public class MinMax {
      * @return Best Heuristic value
      */
     private retourMinMax MinMaxAux(Tablero position, int depth, int alpha, int beta, boolean maximizingPlayer, ArrayList<Position> posibles){
-        if (depth==0 ||  position.isWining((byte) 1 )) return new retourMinMax(new FirstHeuristic(position).HeuristicValue(), null);
-        if (maximizingPlayer) {
+        if (depth==0 ||  position.isWining((byte) 1 )) {
+//            System.out.println("entre");
+            return new retourMinMax(new FirstHeuristic(position).HeuristicValue(), null);
+        }if (maximizingPlayer) {
             retourMinMax aux = new retourMinMax(Integer.MIN_VALUE,null);
             int len = posibles.size() - 1;
             for (int i = 0; i < len; i++) {
                 Position pos = posibles.get(i).clone();
                 //Make
-                position.setTablero(pos, (byte) 1);
+                position.setTablero(pos, this.moi);
                 posibles.remove(i);
                 // retorno
                 retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, false, posibles);
@@ -60,9 +62,9 @@ public class MinMax {
                     aux.setPos(pos);
                     aux.setValue(eval);
                 };
-                if(depth == 5) {
-                    System.out.println("" + aux + " : " + pos);
-                }
+//                if(depth == 1) {
+//                    System.out.println(aux1.getValue() + " --> " + aux + " : " + pos );
+//                }
                 //UnMake
                 position.unSetTablero(pos);
                 posibles.add(i,pos);
@@ -78,7 +80,7 @@ public class MinMax {
             for (int i = 0; i < len; i++) {
                 Position pos = posibles.get(i).clone();
                 //Make
-                position.setTablero(pos, (byte) 2);
+                position.setTablero(pos, this.adv);
                 posibles.remove(i);
                 //Retorno
                 retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, true, posibles);
@@ -87,7 +89,10 @@ public class MinMax {
                     aux.setPos(pos);
                     aux.setValue(eval);
                 }
-                // UnMake
+//                if(depth == 5) {
+//                    System.out.println("" + aux + " : " + pos);
+//                }
+//                // UnMake
                 position.unSetTablero(pos);
                 posibles.add(i,pos);
                 if (aux.getValue() <= alpha){

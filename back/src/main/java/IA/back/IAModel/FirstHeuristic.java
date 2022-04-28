@@ -14,39 +14,64 @@ public class FirstHeuristic {
 
     public FirstHeuristic(Tablero tab) {
         this.tab = tab;
-        this.type = 1;
-        this.typeAdv = 2;
-        this.empty = 0;
+        this.type = (byte) 1;
+        this.typeAdv =(byte) 2;
+        this.empty = (byte) 0;
         this.size = this.tab.getTablero().size() -1 ;
     }
 
 
     public int HeuristicValue(){
-        if (this.tab.isWining(this.type)) return 2000;
-        if(this.tab.isWining(this.typeAdv)) return 2000;
-        else return 0;
-//        int pointMe = HeuristicValueAux(this.type);
-//        int pointAdv = HeuristicValueAux(this.typeAdv);
-////        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
-//        return pointMe - pointAdv;
+//        if(this.tab.isWining(this.typeAdv)) {
+//            System.out.println("Gano comtricante");
+//            return 4000;
+//        }
+//        if (this.tab.isWining(this.type)) {
+//            System.out.println("Gane yo");
+//            return 2000;
+//        }
+//        else return 0;
+        int pointMe = HeuristicValueAux(this.type);
+        int pointAdv = HeuristicValueAux(this.typeAdv);
+//        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
+        return pointMe + pointAdv;
     }
-    private int HeuristicValueAux(byte type){
+    private int HeuristicValueAux (byte type){
         int heuristic = 0;
         ArrayList<Points> verifications = new ArrayList<>();
         verifications.add (this.verificarLineas(this.tab.getChangePos().getCol(), this.tab.getChangePos().getRow(),type));
         verifications.add (this.verificarColumnas(this.tab.getChangePos().getCol(), this.tab.getChangePos().getRow(),type));
         for (Points points: verifications) {
-            heuristic += points.getSequencias() * 20;
-            heuristic += points.getSemiSequencias() * 3;
-            heuristic += points.getsome();
+            if( points.getSequencias() >= 4) heuristic +=1000; // primera
+            else if (points.getSequencias() == 3 && points.getsome() >= 1) // segunda
+                heuristic += 300;
+            else if (points.getSequencias() == 2 && points.getsomeLeft() >= 1 && points.getsomeRight() >= 1 ) // tercera
+                heuristic += 100;
+            else if (points.getSequencias()  + points.getSemiSequencias() == 1 && (points.getsome() > 6) ) // cuarta
+            heuristic += 100;
+            else if (points.getSequencias() == 2 && (points.getsome() > 1 || points.getSemiSequencias() >= 2) ) // quinta
+                heuristic += 25;
+            else  if (points.getSequencias() == 2 && (points.getsome() + points.getSemiSequencias()) > 4) // sexta
+                heuristic += 20;
+            else if (points.getSequencias() == 2 &&  (points.getsome() + points.getSemiSequencias() ) >= 5 ) // septima
+                heuristic += 15;
+            else  if (points.getSequencias() == 1 && (points.getsome() + points.getSemiSequencias()) > 4) // Octava
+                heuristic += 10;
+            else if (points.getSequencias() == 1 &&  (points.getsome() + points.getSemiSequencias() ) > 2 ) // novena
+                heuristic += 5;
+
+
+//            heuristic += points.getSequencias() * 20;
+//            heuristic += points.getSemiSequencias() * 3;
+//            heuristic += points.getsome();
 //            System.out.println(points.getSequencias() + " " + points.getSemiSequencias()  + " " + points.getsome() + this.tab.getChangePos());
         }
 //        System.out.println("--- " + heuristic );
         return heuristic;
     }
     private Points verificarLineas (int col,  int row , byte type) {
-        int leftLimit = Math.max(col-5,0);
-        int rightLimit =  Math.min (col+5,this.size);
+        int leftLimit = Math.max(col-6,0);
+        int rightLimit =  Math.min (col+6,this.size);
         int sequencia = 0;
         int semiSequencia = 0;
         int someLeft = 0;
@@ -91,8 +116,8 @@ public class FirstHeuristic {
     }
     private Points verificarColumnas (int col,  int row , byte type) {
 
-        int upLimit = Math.max(row-5,0);
-        int downLimit =  Math.min (row+5,this.size);
+        int upLimit = Math.max(row-6,0);
+        int downLimit =  Math.min (row+6,this.size);
         int sequencia = 0;
         int semiSequencia = 0;
         int someUp = 0;
@@ -138,3 +163,4 @@ public class FirstHeuristic {
 
     }
 }
+
