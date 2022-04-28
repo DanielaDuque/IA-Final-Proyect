@@ -6,6 +6,20 @@
     background-color: bisque;
 }
 
+.sectionGame{
+    margin-bottom: 2rem;
+}
+.title-section{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    font-family: 'Lora', serif;
+    font-size: 3em;
+  }
+
 img{
     max-height: 100%;
     max-width: 100%;

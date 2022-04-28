@@ -16,7 +16,7 @@ public class MinMax {
     }
 
     public Tablero getNextMove (){
-        retourMinMax ret = this.MinMax(5);
+        retourMinMax ret = this.MinMax(4);
         this.tablero.setTablero(ret.getPos(), (byte) 1);
         this.tablero.setChangePos(ret.getPos());
         System.out.println("-------------------------------------------------------");
@@ -43,14 +43,15 @@ public class MinMax {
      * @return Best Heuristic value
      */
     private retourMinMax MinMaxAux(Tablero position, int depth, int alpha, int beta, boolean maximizingPlayer, ArrayList<Position> posibles){
-        if (depth==0 ||  position.isWining((byte) 1 )) return new retourMinMax(new FirstHeuristic(position).HeuristicValue(), null);
+        if (depth==0 ||  position.isWining((byte) 1 ) || position.isWining((byte) 2 ) || posibles.isEmpty())
+                    return new retourMinMax(new FirstHeuristic(position).HeuristicValue(), null);
         if (maximizingPlayer) {
             retourMinMax aux = new retourMinMax(Integer.MIN_VALUE,null);
-            int len = posibles.size() - 1;
+            int len = posibles.size() ;
             for (int i = 0; i < len; i++) {
                 Position pos = posibles.get(i).clone();
                 //Make
-                position.setTablero(pos, (byte) 1);
+                position.setTablero(pos, (byte) 1); // Moi
                 posibles.remove(i);
                 // retorno
                 retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, false, posibles);
@@ -74,11 +75,11 @@ public class MinMax {
             return aux;
         }else{
             retourMinMax aux = new retourMinMax(Integer.MAX_VALUE,null);
-            int len = posibles.size() -1 ;
+            int len = posibles.size();
             for (int i = 0; i < len; i++) {
                 Position pos = posibles.get(i).clone();
                 //Make
-                position.setTablero(pos, (byte) 2);
+                position.setTablero(pos, (byte) 2); // Abv
                 posibles.remove(i);
                 //Retorno
                 retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, true, posibles);

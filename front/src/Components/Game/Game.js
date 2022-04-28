@@ -7,32 +7,48 @@ import { Link } from "react-router-dom";
 class Game extends Component{
     constructor(props){
         super(props)
-        this.controlers = new GameControler();
+        this.size = props.variable
+        this.controlers = new GameControler(this.size);
         this.state = {
             src : this.controlers.game,
-            win : this.controlers.win
+            win : this.controlers.win,
+            play : true
         }
         this.makeMove = this.makeMove.bind(this);
+        this.columns = this.columns.bind(this);
+        this.rows = this.rows.bind(this);
     }
     async makeMove(row, col ){
-        if(this.controlers.game[row][col] === this.controlers.empty) {
-            await this.controlers.makeMove(row, col);
+        if(this.controlers.game[row][col] === this.controlers.empty && this.state.play) {
             this.setState({
-                win: this.controlers.win
+                play: false
             });
-            await this.controlers.makeMoveBack(this.controlers.white,row,col);
-            this.setState({
-                src: this.controlers.game,
-                win: this.controlers.win
-            });
-            console.log(this.state.win)
+            await this.controlers.makeMove(row, col).then(
+                ()=>{
+                    this.setState({
+                        win: this.controlers.win
+                    });
+                    this.controlers.makeMoveBack(this.controlers.white,row,col).then(
+                        ()=>{
+                            this.setState({
+                                src: this.controlers.game,
+                                win: this.controlers.win,
+                                play: true
+                            });
+                            console.log(this.state.win)
+                        }
+                    )
+                }
+            );
         }
      }
+
+
       
     columns(idx){
         let table = [];
-        for (let index = 0; index < 19; index++) {
-            let val = idx*(19) + index;
+        for (let index = 0; index < this.size; index++) {
+            let val = idx*(this.size) + index;
             table.push(
                 <div className="col-auto col-size fondo" key = {val} id={val} >
                     <Ficha
@@ -48,9 +64,9 @@ class Game extends Component{
     }
     rows (){
         let table = [];
-        for (let index = 0; index < 19; index++) {
+        for (let index = 0; index < this.size; index++) {
             table.push(
-                <div className="row" >
+                <div className="row justify-content-center" >
                     {this.columns(index)}
                 </div>  
             )
@@ -61,9 +77,10 @@ class Game extends Component{
     render(){
         return(
         <div>
-            <h1> Game </h1>
-            <section className = "container">
+            <h1 className = "title-section">  Game mode {this.size} x {this.size} </h1>
+            <section className = "container sectionGame">
                 {this.rows()}
+                
             </section>
 
             <section className={
@@ -76,11 +93,11 @@ class Game extends Component{
                         </div>
                         <div class="content-buttons">
                             <div className = "btn-group" role="group">
-                                <button type="button" className = "btn btn-outline-danger"> 
-                                    <Link to ="/">
-                                        Back to menu
-                                    </Link> 
-                                </button>
+                                <Link to ="/">
+                                    <button type="button" className = "btn btn-outline-danger"> 
+                                            Back to menu
+                                    </button>
+                                </Link> 
                                 <button type="button"className = "btn btn-outline-success"
                                         onClick={()=> { window.location.reload()}}> 
                                         Re-play                                    

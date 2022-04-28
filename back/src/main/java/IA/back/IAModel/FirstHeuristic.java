@@ -22,9 +22,15 @@ public class FirstHeuristic {
 
 
     public int HeuristicValue(){
-        if (this.tab.isWining(this.type)) return 2000;
-        if(this.tab.isWining(this.typeAdv)) return 2000;
-        else return 0;
+        int valor = 0;
+        if(this.tab.isWining(this.typeAdv)) valor = -2000;
+        else if(this.tab.isWining(this.type)) {
+//            System.out.println("gane");
+            valor = 2000;
+        }
+//        System.out.println(" ****** Valor: " + valor);
+//        System.out.println(this.tab);
+        return valor;
 //        int pointMe = HeuristicValueAux(this.type);
 //        int pointAdv = HeuristicValueAux(this.typeAdv);
 ////        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
