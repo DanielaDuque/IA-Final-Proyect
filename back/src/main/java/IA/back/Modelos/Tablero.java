@@ -111,16 +111,13 @@ public class Tablero {
     private boolean isWiningDiagonalIzq (Position pos, byte type) {
         boolean win = false;
         int aux = 0;
-        int row=0;
-        int col = 0;
-        //Horizontal
-        int max = Math.max(pos.getCol(), pos.getRow());
-        if (max == pos.getRow()){
-            row = Math.max(0,pos.getRow()-pos.getCol());
-            col =  Math.max(0,pos.getCol()-(this.NbWinPiece-1));
-        }else{
-            row = Math.max(0,pos.getRow()-(this.NbWinPiece-1));
-            col =  Math.max(0,pos.getCol()-pos.getRow());
+        int row = pos.getRow();
+        int col = pos.getCol();
+        int cont = 0;
+        while(col < this.size && row> 0 && cont<this.NbWinPiece){
+            col--;
+            row--;
+            cont++;
         }
         while(row< this.size && col <this.size ){
             if(this.tablero.get(row++).get(col++) == type) {
@@ -141,17 +138,15 @@ public class Tablero {
         boolean win = false;
         int aux = 0;
         //Horizontal
-        int max = Math.max(pos.getCol(), pos.getRow());
-        int row = 0;
-        int col = 0;
-        if (max == col){
-            col = Math.min(this.size-1, col+(this.NbWinPiece-1));
-            row =+ (col - max);
-        }else{
-            row = Math.max(0, pos.getRow()-(this.NbWinPiece-1));
-            col = Math.min(pos.getCol() + (this.NbWinPiece-1) , this.size-1);
-
+        int row = pos.getRow();
+        int col = pos.getCol();
+        int cont = 0;
+        while(col < this.size && row> 0 && cont<this.NbWinPiece){
+            col++;
+            row--;
+            cont++;
         }
+
         while(row < this.size && col >=0 ){
             if(this.tablero.get(row++).get(col--) == type ) {
                 win=true;

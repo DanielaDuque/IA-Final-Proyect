@@ -22,15 +22,8 @@ public class FirstHeuristic {
 
 
     public int HeuristicValue(){
-//        int valor = 0;
-//        if(this.tab.isWining(this.typeAdv)) valor = -2000;
-//        else if(this.tab.isWining(this.type)) {
-////            System.out.println("gane");
-//            valor = 2000;
-//        }
         int pointMe = HeuristicValueAux(this.type);
         int pointAdv = HeuristicValueAux(this.typeAdv);
-//        System.out.println(pointAdv + pointMe + " pos " + this.tab.getChangePos());
         return pointMe - pointAdv;
     }
     private int HeuristicValueAux(byte type){
@@ -57,9 +50,7 @@ public class FirstHeuristic {
                 heuristic += 10;
             else if (points.getSequencias() == 1 &&  (points.getsome() + points.getSemiSequencias() ) > 2 ) // novena
                 heuristic += 5;
-//            System.out.println(points.getSequencias() + " " + points.getSemiSequencias()  + " " + points.getsome() + this.tab.getChangePos());
         }
-//        System.out.println("--- " + heuristic );
         return heuristic;
     }
     private Points verificarLineas (int col,  int row , byte type) {

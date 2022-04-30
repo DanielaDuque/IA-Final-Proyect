@@ -16,21 +16,22 @@ public class MinMax {
     }
 
     public Tablero getNextMove (){
-        retourMinMax ret = this.MinMax(4);
+        retourMinMax ret = this.MinMax();
         this.tablero.setTablero(ret.getPos(), (byte) 1);
         this.tablero.setChangePos(ret.getPos());
-        System.out.println("-------------------------------------------------------");
         return this.tablero;
     }
 
     /**
      * MinMAx with AlphaBeta optimization
-     * @param depth
      * @return
      */
-    private retourMinMax MinMax(int depth){
+    private retourMinMax MinMax(){
+        int depth = 4;
         ArrayList<Position> posibles = this.tablero.getPosibles();
         Collections.sort(posibles);
+        if(posibles.size() <= 20) depth = 8;
+        else if(posibles.size() <= 200) depth = 6;
         return this.MinMaxAux(this.tablero, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, posibles);
     }
     /**
@@ -57,13 +58,9 @@ public class MinMax {
                 retourMinMax aux1 = MinMaxAux(position, depth-1, alpha, beta, false, posibles);
                 int eval = aux1.getValue();
                 if (eval > aux.getValue()) {
-//                  bestPos = pos;
                     aux.setPos(pos);
                     aux.setValue(eval);
                 };
-                if(depth == 5) {
-                    System.out.println("" + aux + " : " + pos);
-                }
                 //UnMake
                 position.unSetTablero(pos);
                 posibles.add(i,pos);

@@ -23,6 +23,7 @@ class Game extends Component{
             this.setState({
                 play: false
             });
+            await this.controlers.isWining(2,row,col)
             await this.controlers.makeMove(row, col).then(
                 ()=>{
                     this.setState({
