@@ -114,7 +114,7 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col < this.size && row> 0 && cont<this.NbWinPiece){
+        while(col > 0 && row > 0 && cont<this.NbWinPiece){
             col--;
             row--;
             cont++;
@@ -141,7 +141,7 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col < this.size && row> 0 && cont<this.NbWinPiece){
+        while(col < this.size - 1  && row> 0 && cont<this.NbWinPiece){
             col++;
             row--;
             cont++;

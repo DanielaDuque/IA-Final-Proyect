@@ -31,7 +31,7 @@ public class MinMax {
         ArrayList<Position> posibles = this.tablero.getPosibles();
         Collections.sort(posibles);
         if(posibles.size() <= 20) depth = 8;
-        else if(posibles.size() <= 200) depth = 6;
+        else if(posibles.size() <= 100) depth = 6;
         return this.MinMaxAux(this.tablero, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, posibles);
     }
     /**
