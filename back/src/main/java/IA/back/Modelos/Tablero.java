@@ -71,12 +71,13 @@ public class Tablero {
         boolean win = false;
         int aux = 0;
         //Horizontal
-        for (int i = Math.max(0, pos.getCol()- (this.NbWinPiece-1)); i < this.tablero.size() ; i++)
+        for (int i = Math.max(0, pos.getCol() - this.NbWinPiece); i <Math.min(this.size, pos.getCol() + this.NbWinPiece) ; i++)
         {
+            if(i == pos.getCol()) continue;
             if(this.tablero.get(pos.getRow()).get(i) == type) {
                 win = true;
                 aux++;
-                if(aux==this.NbWinPiece) break;
+                if(aux >=this.NbWinPiece - 1) break;
             }
             else{
                 if(win) {
@@ -85,18 +86,18 @@ public class Tablero {
                 }
             }
         }
-        return (win && aux==this.NbWinPiece);
+        return (win && aux>=this.NbWinPiece - 1 );
     }
     private boolean isWiningVertical (Position pos, byte type) {
         boolean win = false;
         int aux = 0;
         //Horizontal
-        int i = Math.max(0, pos.getRow()-(this.NbWinPiece-1));
-        while(i < this.size){
-            if(this.tablero.get(i++).get(pos.getCol()) == type) {
+        for (int i = Math.max(0, pos.getRow() - this.NbWinPiece); i <Math.min(this.size, pos.getRow() + this.NbWinPiece) ; i++) {
+            if(i == pos.getRow()) continue;
+            if(this.tablero.get(i).get(pos.getCol()) == type) {
                 win=true;
                 aux++;
-                if(aux==this.NbWinPiece) break;
+                if(aux>=this.NbWinPiece - 1) break;
             }
             else{
                 if(win) {
@@ -105,7 +106,7 @@ public class Tablero {
                 };
             }
         }
-        return (win && aux==this.NbWinPiece);
+        return (win && aux>=this.NbWinPiece - 1);
     }
 
     private boolean isWiningDiagonalIzq (Position pos, byte type) {
@@ -114,12 +115,17 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col > 0 && row > 0 && cont<this.NbWinPiece){
+        while(col > 0 && row > 0 && cont < this.NbWinPiece){
             col--;
             row--;
             cont++;
         }
-        while(row< this.size && col <this.size ){
+        while(row < Math.min(this.size, pos.getRow() + this.NbWinPiece) && col < Math.min(this.size, pos.getCol() + this.NbWinPiece) ){
+            if(row == pos.getRow() && col == pos.getCol()) {
+                row++;
+                col++;
+                continue;
+            }
             if(this.tablero.get(row++).get(col++) == type) {
                 win=true;
                 aux++;
@@ -132,7 +138,7 @@ public class Tablero {
                 };
             }
         }
-        return (win && aux==this.NbWinPiece);
+        return (win && aux>=this.NbWinPiece - 1);
     }
     private boolean isWiningDiagonalDer (Position pos, byte type) {
         boolean win = false;
@@ -141,13 +147,18 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col < this.size - 1  && row> 0 && cont<this.NbWinPiece){
+        while(col < this.size - 1  && row > 0 && cont < this.NbWinPiece){
             col++;
             row--;
             cont++;
         }
 
-        while(row < this.size && col >=0 ){
+        while(row < Math.min(this.size, pos.getRow() + this.NbWinPiece) && col >= Math.max(0, pos.getRow() - this.NbWinPiece) ){
+            if(row == pos.getRow() && col == pos.getCol()) {
+                row++;
+                col--;
+                continue;
+            }
             if(this.tablero.get(row++).get(col--) == type ) {
                 win=true;
                 aux++;
@@ -160,7 +171,7 @@ public class Tablero {
                 };
             }
         }
-        return (win && aux==this.NbWinPiece);
+        return (win && aux>=this.NbWinPiece-1);
     }
 
 
