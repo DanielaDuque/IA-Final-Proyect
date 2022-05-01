@@ -23,24 +23,22 @@ class Game extends Component{
             this.setState({
                 play: false
             });
-            await this.controlers.isWining(2,row,col)
-            await this.controlers.makeMove(row, col).then(
+            this.controlers.makeMove(row, col)
+            await this.controlers.isWining(2,row,col).then(
+                this.setState({
+                    win: this.controlers.win
+                })
+            )
+            await this.controlers.makeMoveBack(this.controlers.white,row,col).then(
                 ()=>{
                     this.setState({
-                        win: this.controlers.win
+                        src: this.controlers.game,
+                        win: this.controlers.win,
+                        play: true
                     });
-                    this.controlers.makeMoveBack(this.controlers.white,row,col).then(
-                        ()=>{
-                            this.setState({
-                                src: this.controlers.game,
-                                win: this.controlers.win,
-                                play: true
-                            });
-                            console.log(this.state.win)
-                        }
-                    )
+                    console.log(this.state.win)
                 }
-            );
+            )
         }
      }
 

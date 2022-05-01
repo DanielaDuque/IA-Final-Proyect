@@ -116,7 +116,7 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col > 0 && row > 0 && cont < this.NbWinPiece){
+        while(col > 0 && row > 0 && cont < this.NbWinPiece - 1){
             col--;
             row--;
             cont++;
@@ -130,7 +130,7 @@ public class Tablero {
             if(this.tablero.get(row++).get(col++) == type) {
                 win=true;
                 aux++;
-                if(aux==this.NbWinPiece) break;
+                if(aux>=this.NbWinPiece-1) break;
             }
             else{
                 if(win) {
@@ -148,13 +148,13 @@ public class Tablero {
         int row = pos.getRow();
         int col = pos.getCol();
         int cont = 0;
-        while(col < this.size - 1  && row > 0 && cont < this.NbWinPiece){
+        while(col < this.size - 1  && row > 0 && cont < this.NbWinPiece -1){
             col++;
             row--;
             cont++;
         }
 
-        while(row < Math.min(this.size, pos.getRow() + this.NbWinPiece) && col >= Math.max(0, pos.getRow() - this.NbWinPiece) ){
+        while(row < Math.min(this.size, pos.getRow() + this.NbWinPiece) && col >= Math.max(0, pos.getCol() - this.NbWinPiece) ){
             if(row == pos.getRow() && col == pos.getCol()) {
                 row++;
                 col--;
@@ -163,7 +163,7 @@ public class Tablero {
             if(this.tablero.get(row++).get(col--) == type ) {
                 win=true;
                 aux++;
-                if(aux==this.NbWinPiece) break;
+                if(aux>=this.NbWinPiece-1) break;
             }
             else{
                 if(win) {
