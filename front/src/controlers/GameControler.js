@@ -16,11 +16,9 @@ class GameControler {
         }
     }
 
-    async makeMove(row, col){
+    makeMove(row, col){
         this.game[row][col] = this.black;
         console.log("entre");
-        await this.isWining  (this.black, row,col);
-        
     }
 
     async makeMoveBack(typ, row, col){
