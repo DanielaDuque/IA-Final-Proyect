@@ -43,7 +43,7 @@ public class Tablero {
     }
 
     public Position getChangePos() {
-        return changePos;
+        return changePos.clone();
     }
 
     public Byte getPosition(Position pos){
@@ -59,7 +59,8 @@ public class Tablero {
         this.tablero.get(pos.getRow()).set(pos.getCol(), (byte)0);
     }
     public boolean isWining(byte type){
-        if (this.isWiningHorizontal(this.changePos, type)) return true;
+        if(this.changePos == null) return false;
+        else if (this.isWiningHorizontal(this.changePos, type)) return true;
         else if (this.isWiningVertical(this.changePos, type)) return true;
         else if (this.isWiningDiagonalIzq(this.changePos, type)) return true;
         else if (this.isWiningDiagonalDer(this.changePos, type)) return true;

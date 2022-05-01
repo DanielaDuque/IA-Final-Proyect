@@ -30,8 +30,9 @@ public class MinMax {
         int depth = 4;
         ArrayList<Position> posibles = this.tablero.getPosibles();
         Collections.sort(posibles);
+        this.tablero.setChangePos(null);
         if(posibles.size() <= 20) depth = 8;
-        else if(posibles.size() <= 100) depth = 6;
+        else if(posibles.size() <= 50) depth = 6;
         return this.MinMaxAux(this.tablero, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, posibles);
     }
     /**
